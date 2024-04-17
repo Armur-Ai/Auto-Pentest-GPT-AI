@@ -1,0 +1,6 @@
+ctransformers --install-option="--no-binary=ctransformers" --install-option="CT_HIPBLAS=1"
+transformers
+colorama
+torch
+sentencepiece
+protobuf
