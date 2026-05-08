@@ -13,8 +13,9 @@ import (
 )
 
 var ctfCmd = &cobra.Command{
-	Use:   "ctf",
-	Short: "Autonomous CTF machine solving",
+	Use:    "ctf",
+	Short:  "Autonomous CTF machine solving",
+	Hidden: true, // 4.8.2: 'scan' is the main path; ctf is specialized
 }
 
 var ctfSolveCmd = &cobra.Command{

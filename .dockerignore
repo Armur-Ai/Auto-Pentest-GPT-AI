@@ -1,0 +1,35 @@
+.git
+.github
+.gitignore
+
+# IDE / editor noise
+.vscode
+.idea
+*.swp
+.DS_Store
+
+# Local artefacts
+reports/
+submissions/
+drafts/
+*.log
+*.gguf
+
+# Test data + caches
+.cache/
+**/__pycache__/
+**/*.pyc
+
+# Demo + docs that shouldn't bloat the build context
+banner/
+docs/
+
+# Web dashboard build output (built separately)
+web/node_modules
+web/.next
+web/dist
+web/build
+
+# Workshop / training fixtures (huge, not needed for the binary)
+training/
+tests/bench/cybench/fixtures/

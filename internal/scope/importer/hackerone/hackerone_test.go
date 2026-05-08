@@ -82,6 +82,53 @@ func TestImport_AuthHeaderWhenCredentialsProvided(t *testing.T) {
 	}
 }
 
+func TestPublicReports_ParsesHacktivityFeed(t *testing.T) {
+	body := `{
+		"data": [
+			{"id":"r1","attributes":{"title":"Reflected XSS in /search","state":"resolved"}},
+			{"id":"r2","attributes":{"title":"SSRF via image fetch","state":"triaged"}}
+		]
+	}`
+	var sawSlug bool
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if !strings.Contains(r.URL.RawQuery, "team_handle:acme") {
+			http.NotFound(w, r)
+			return
+		}
+		sawSlug = true
+		_, _ = io.WriteString(w, body)
+	}))
+	defer srv.Close()
+
+	c := NewClient(Config{})
+	c.baseURL = srv.URL + "/v1"
+	got, err := c.PublicReports(context.Background(), "acme", 50)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !sawSlug {
+		t.Error("query string did not include team_handle filter")
+	}
+	if len(got) != 2 {
+		t.Fatalf("expected 2 reports, got %d", len(got))
+	}
+	if got[0].Title != "Reflected XSS in /search" || got[0].Program != "acme" {
+		t.Errorf("first report wrong: %+v", got[0])
+	}
+}
+
+func TestPublicReports_HTTPErrorSurfaced(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.Error(w, "rate limited", http.StatusTooManyRequests)
+	}))
+	defer srv.Close()
+	c := NewClient(Config{})
+	c.baseURL = srv.URL + "/v1"
+	if _, err := c.PublicReports(context.Background(), "acme", 10); err == nil {
+		t.Error("want error on 429")
+	}
+}
+
 func TestImport_SurfacesHTTPErrors(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, `{"errors":["not found"]}`, http.StatusNotFound)

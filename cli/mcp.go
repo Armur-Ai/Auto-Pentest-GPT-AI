@@ -10,8 +10,9 @@ import (
 )
 
 var mcpCmd = &cobra.Command{
-	Use:   "mcp",
-	Short: "MCP server for Claude Desktop and Cursor integration",
+	Use:    "mcp",
+	Short:  "MCP server for Claude Desktop and Cursor integration",
+	Hidden: true, // 4.8.2: keep root --help to one screen
 }
 
 var mcpServeCmd = &cobra.Command{

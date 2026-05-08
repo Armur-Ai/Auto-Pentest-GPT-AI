@@ -174,38 +174,64 @@ func runSubmit(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-// loadPriors pulls the researcher's past submissions from the platform,
-// if credentials are available. Missing credentials = empty list, not
-// an error — dedup is an enhancement and shouldn't block submit.
+// loadPriors pulls past submissions to compare against. Two sources:
+//
+//  1. The researcher's OWN reports (any program) — needs API creds.
+//     Catches "I already filed this last week."
+//  2. The program's PUBLIC disclosed reports (4.4.6) — works without
+//     creds. Catches "this is already disclosed; would file as duplicate."
+//
+// Missing credentials degrade to public-only; fully empty list when
+// neither source returns anything. Dedup is an enhancement, never a
+// hard block on submit.
 func loadPriors(ctx context.Context, platform, program string) []dedup.Prior {
-	switch strings.ToLower(platform) {
-	case "h1", "hackerone":
-		user := os.Getenv("HACKERONE_API_USER")
-		token := os.Getenv("HACKERONE_API_TOKEN")
-		if token == "" {
-			if v, err := keychain.Get(keychain.KeyHackerOneToken); err == nil {
-				token = v
-			}
-		}
-		if user == "" || token == "" {
-			return nil
-		}
-		c := hackerone.NewClient(hackerone.Config{APIUser: user, APIToken: token})
-		reports, err := c.Reports(ctx, 50)
-		if err != nil {
-			return nil
-		}
-		out := make([]dedup.Prior, 0, len(reports))
-		for _, r := range reports {
-			if program != "" && !strings.EqualFold(r.Program, program) {
-				continue
-			}
-			out = append(out, dedup.Prior{ID: r.ID, Title: r.Title, State: r.State})
-		}
-		return out
+	if strings.ToLower(platform) != "h1" && strings.ToLower(platform) != "hackerone" {
+		// Bugcrowd / Intigriti dedup endpoints are TBD.
+		return nil
 	}
-	// Bugcrowd / Intigriti 'my prior reports' endpoints are TBD.
-	return nil
+
+	user := os.Getenv("HACKERONE_API_USER")
+	token := os.Getenv("HACKERONE_API_TOKEN")
+	if token == "" {
+		if v, err := keychain.Get(keychain.KeyHackerOneToken); err == nil {
+			token = v
+		}
+	}
+	c := hackerone.NewClient(hackerone.Config{APIUser: user, APIToken: token})
+
+	var priors []dedup.Prior
+
+	// 1. Researcher's own reports — needs creds.
+	if user != "" && token != "" {
+		if reports, err := c.Reports(ctx, 50); err == nil {
+			for _, r := range reports {
+				if program != "" && !strings.EqualFold(r.Program, program) {
+					continue
+				}
+				priors = append(priors, dedup.Prior{
+					ID:    "own:" + r.ID,
+					Title: r.Title,
+					State: r.State,
+				})
+			}
+		}
+	}
+
+	// 2. Program's public disclosed reports — works without creds, but
+	// only meaningful when we know the program slug.
+	if program != "" {
+		if reports, err := c.PublicReports(ctx, program, 50); err == nil {
+			for _, r := range reports {
+				priors = append(priors, dedup.Prior{
+					ID:    "public:" + r.ID,
+					Title: r.Title,
+					State: r.State,
+				})
+			}
+		}
+	}
+
+	return priors
 }
 
 func sanitiseFilename(s string) string {

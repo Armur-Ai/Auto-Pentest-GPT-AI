@@ -1,0 +1,45 @@
+name: example-program-overlay
+description: |
+  Example per-program overlay (Phase 4.6.7). Drop a file at
+  playbooks/programs/<slug>.yaml and the runner merges it on top
+  of the base bug-bounty playbook before scanning.
+
+  Merge rules (see internal/plugins/overlay.go):
+    - Scalars (Name, Description, Version): overlay wins when set
+    - Tags: union, deduped
+    - Variables: per-key, overlay wins
+    - Phases: phases with the same Name REPLACE the base phase;
+      otherwise APPEND after base phases
+
+author:
+  name: pentest-swarm community
+  github: Armur-Ai
+version: 0.1.0
+
+tags:
+  - graphql
+  - shopify-style
+
+# Override base variables — e.g. focus this program's recon on a
+# specific subdomain pattern, set a tighter rate cap, etc.
+variables:
+  focus_subdomains:
+    type: string
+    default: "store.example.com,checkout.example.com"
+  rate_limit_rps:
+    type: int
+    default: "5"
+
+# Phases here either REPLACE a base phase by name (use the base
+# playbook's phase Name) or APPEND new phases. Most program overlays
+# only add a single program-specific phase rather than rewriting
+# recon / classify / exploit.
+phases:
+  - name: graphql-introspection
+    tools:
+      - name: nuclei
+        options:
+          templates: "graphql/"
+    post_analysis: |
+      Look for introspection enabled, mutations exposed without auth,
+      and GraphQL endpoints behind common auth headers.

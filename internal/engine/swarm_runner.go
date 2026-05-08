@@ -147,6 +147,9 @@ func (r *Runner) RunSwarm(ctx context.Context, cc CampaignConfig, onEvent EventC
 		r.cleanup,
 		cc.DryRun,
 	)
+	if cc.Assist {
+		executor = executor.WithConfirm(r.assist)
+	}
 
 	// Pheromone tuning: config file if present, else embedded defaults.
 	// --exploration-bias on the CLI applies a multiplier at lookup time.

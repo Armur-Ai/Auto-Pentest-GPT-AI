@@ -43,6 +43,12 @@ type CampaignConfig struct {
 	// only verified / not-superseded findings ship. 0.1 is "aggressive
 	// mode" which includes suspected-but-unverified findings.
 	PublishThreshold float64
+
+	// Assist, when true, prompts the operator y/N before every executed
+	// step. Designed for researchers running against fragile programs
+	// where breaking the relationship is more costly than slower scans.
+	// See cli.assistConfirm for the TTY implementation.
+	Assist bool
 }
 
 // EventCallback is called for every campaign event (for TUI/streaming).
@@ -54,6 +60,7 @@ type Runner struct {
 	memoryStore *memory.MemoryStore
 	cleanup     pipeline.CleanupRegistryIface
 	strict      bool
+	assist      exploit.ConfirmFunc // optional; nil = no human-in-the-loop
 }
 
 // Option customises Runner construction.
@@ -71,6 +78,14 @@ func WithCleanupRegistry(reg pipeline.CleanupRegistryIface) Option {
 // emits error events to the stream.
 func WithStrictLLM() Option {
 	return func(r *Runner) { r.strict = true }
+}
+
+// WithAssistConfirmer wires a human-in-the-loop hook that's called
+// before every executed step in assist mode (4.6.4). Only fires when
+// CampaignConfig.Assist is also true — the option installs the
+// callback; the flag turns it on.
+func WithAssistConfirmer(fn exploit.ConfirmFunc) Option {
+	return func(r *Runner) { r.assist = fn }
 }
 
 // NewRunner creates a campaign runner.

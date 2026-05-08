@@ -10,8 +10,9 @@ import (
 )
 
 var configCmd = &cobra.Command{
-	Use:   "config",
-	Short: "Manage pentestswarm configuration",
+	Use:    "config",
+	Short:  "Manage pentestswarm configuration",
+	Hidden: true, // 4.8.2: 'init' covers the common path; config.show is power-user
 }
 
 var configInitCmd = &cobra.Command{

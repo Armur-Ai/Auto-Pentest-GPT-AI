@@ -170,6 +170,64 @@ type Report struct {
 	Program string
 }
 
+// PublicReports fetches a program's PUBLIC disclosed reports — the hacktivity
+// feed filtered to one program. Used by Phase 4.4.6 dedup so we don't file
+// a duplicate of something the program has already triaged and disclosed.
+//
+// Auth is recommended (higher rate limits) but not required — hacktivity is
+// public. The endpoint is paginated; we cap at `limit` (default 25).
+func (c *Client) PublicReports(ctx context.Context, programSlug string, limit int) ([]Report, error) {
+	if limit <= 0 || limit > 100 {
+		limit = 25
+	}
+	// Hacktivity API: filter by team_handle to scope to one program.
+	url := fmt.Sprintf("%s/hackers/hacktivity?queryString=team_handle:%s&page[size]=%d",
+		c.baseURL, programSlug, limit)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Accept", "application/json")
+	if c.apiUser != "" && c.apiToken != "" {
+		auth := base64.StdEncoding.EncodeToString([]byte(c.apiUser + ":" + c.apiToken))
+		req.Header.Set("Authorization", "Basic "+auth)
+	}
+	resp, err := c.http.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("hackerone transport: %w", err)
+	}
+	defer resp.Body.Close()
+	body, _ := io.ReadAll(resp.Body)
+	if resp.StatusCode >= 400 {
+		return nil, fmt.Errorf("hackerone %d: %s", resp.StatusCode, string(body))
+	}
+	// The hacktivity envelope wraps a 'report' relationship with the title
+	// + state on each disclosed item.
+	var envelope struct {
+		Data []struct {
+			ID         string `json:"id"`
+			Attributes struct {
+				Title     string `json:"title"`
+				State     string `json:"state"`
+				CreatedAt string `json:"created_at"`
+			} `json:"attributes"`
+		} `json:"data"`
+	}
+	if err := json.Unmarshal(body, &envelope); err != nil {
+		return nil, fmt.Errorf("parse hacktivity: %w", err)
+	}
+	out := make([]Report, 0, len(envelope.Data))
+	for _, r := range envelope.Data {
+		out = append(out, Report{
+			ID:      r.ID,
+			Title:   r.Attributes.Title,
+			State:   r.Attributes.State,
+			Program: programSlug,
+		})
+	}
+	return out, nil
+}
+
 // Policy fetches the program's rules-of-engagement text. Used by
 // `pentestswarm program inspect h1:<slug>` to extract machine-readable
 // constraints (rate limits, banned techniques, required headers).

@@ -13,8 +13,9 @@ import (
 )
 
 var explainCmd = &cobra.Command{
-	Use:   "explain <finding-description|cve-id>",
-	Short: "Explain a finding or CVE in plain English",
+	Use:    "explain <finding-description|cve-id>",
+	Short:  "Explain a finding or CVE in plain English",
+	Hidden: true, // 4.8.2: utility command, kept out of root --help
 	Long: `Uses AI to explain a vulnerability in plain English, tailored to the audience.
 Pass a CVE ID, finding description, or any security term.`,
 	Args: cobra.MinimumNArgs(1),
