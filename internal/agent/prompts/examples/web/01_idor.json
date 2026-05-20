@@ -1,0 +1,7 @@
+{
+  "category": "web",
+  "vuln_class": "IDOR",
+  "title": "Sequential order ID enumeration with second-user auth state",
+  "user": "Recon surfaced: GET /api/orders/12345 returns the full order object (line items, shipping address, payment-method last-4) when authenticated with the current user's Bearer token. The ID 12345 is sequential — adjacent orders likely belong to other users. Two authenticated sessions (user_A, user_B) are held on the blackboard.",
+  "assistant": "RECON: endpoint /api/orders/{id} returns sensitive PII (shipping address, payment last-4). ID is sequential. The risk pattern is classic IDOR — the backend likely authenticates the request (Bearer token valid) but does not authorize (does not check that the order belongs to the token's user).\n\nHYPOTHESIS: IDOR / BOLA. The endpoint trusts the URL-supplied ID without checking it against the authenticated user's order list. OWASP API #1.\n\nTEST: minimum probe is to replay the same endpoint with user_A's Bearer token but a different order ID — specifically an order ID known to belong to user_B (or simply an adjacent ID like 12344 / 12346). If the response body returns valid order data (not 403 / 404 / empty), IDOR is confirmed.\n\nIf the indicator is a 200 with PII for an order that user_A did not place, that is the confirmation. I will:\n1. Issue GET /api/orders/12344 with user_A's token.\n2. Compare the response's owner identity against user_A's known order list.\n3. If different owner → record finding with status, body fragment, and reproduction request."
+}

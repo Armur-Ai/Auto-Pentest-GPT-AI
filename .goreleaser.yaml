@@ -1,0 +1,155 @@
+# GoReleaser config for Pentest Swarm AI.
+#
+# Replaces the hand-rolled matrix build in .github/workflows/release.yml.
+# Triggers on `git push --tags` of any `v*` tag.
+#
+# Filename / artifact shape is deliberately backward-compatible with the
+# pre-GoReleaser releases (raw binaries named `pentestswarm-<os>-<arch>`,
+# plus `checksums.txt`) so the existing Homebrew formula keeps working
+# without coordinated changes in the homebrew-tap repo.
+#
+# Local snapshot test (no publish):
+#   make snapshot
+#   # or: goreleaser release --snapshot --clean
+#
+# Real release (pushes to GitHub):
+#   git tag v0.1.1 && git push origin v0.1.1
+#   # GHA does the rest.
+
+version: 2
+
+project_name: pentestswarm
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: pentestswarm
+    main: ./cmd/pentestswarm/
+    binary: pentestswarm
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ignore:
+      # Windows on arm64 is a fringe target and the current Homebrew
+      # formula doesn't reference it. Skip to keep the release matrix tight.
+      - goos: windows
+        goarch: arm64
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w
+      - -X main.version={{.Version}}
+      - -X main.commit={{.Commit}}
+      - -X main.date={{.Date}}
+
+archives:
+  # Use format: binary so the release artifacts are raw binaries
+  # rather than tar.gz / zip. This matches the existing release.yml
+  # output and means the homebrew-tap formula keeps working unchanged.
+  - id: binaries
+    formats:
+      - binary
+    name_template: 'pentestswarm-{{ .Os }}-{{ .Arch }}'
+
+checksum:
+  name_template: 'checksums.txt'
+  algorithm: sha256
+
+changelog:
+  use: github
+  sort: asc
+  groups:
+    - title: Features
+      regexp: '^.*?feat(\(.+\))??!?:.+$'
+      order: 0
+    - title: Fixes
+      regexp: '^.*?fix(\(.+\))??!?:.+$'
+      order: 1
+    - title: Performance
+      regexp: '^.*?perf(\(.+\))??!?:.+$'
+      order: 2
+    - title: Docs
+      regexp: '^.*?docs(\(.+\))??!?:.+$'
+      order: 3
+    - title: Other
+      order: 999
+
+release:
+  github:
+    owner: Armur-Ai
+    name: Pentest-Swarm-AI
+  draft: false
+  # `prerelease: auto` marks tags like v1.0.0-rc1 or v0.2.0-beta as
+  # pre-releases automatically; vN.N.N tags ship as full releases.
+  prerelease: auto
+  mode: replace
+  header: |
+    ## Pentest Swarm AI {{ .Tag }}
+
+    Install via Homebrew:
+    ```
+    brew install Armur-Ai/tap/pentestswarm
+    ```
+
+    Install via AUR (once submitted):
+    ```
+    yay -S pentestswarm-bin
+    ```
+
+    Run via Docker (16 security tools pre-installed):
+    ```
+    docker run --rm ghcr.io/armur-ai/pentestswarm:{{ .Tag }} scan example.com
+    ```
+  footer: |
+    ---
+    Full source: github.com/Armur-Ai/Pentest-Swarm-AI
+
+# --- Follow-ups (intentionally not enabled yet — require secrets/setup) ---
+#
+# Once HOMEBREW_TAP_TOKEN secret is added to the repo (a PAT with write
+# access to Armur-Ai/homebrew-tap), uncomment the brews: block below to
+# have GoReleaser push the formula directly on each release, replacing
+# the 6h-cron polling in homebrew-tap/.github/workflows/update-formula.yml:
+#
+# brews:
+#   - name: pentestswarm
+#     repository:
+#       owner: Armur-Ai
+#       name: homebrew-tap
+#       token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
+#     directory: Formula
+#     homepage: https://github.com/Armur-Ai/Pentest-Swarm-AI
+#     description: Swarm of AI agents for authorized penetration testing
+#     license: AGPL-3.0-only
+#     test: |
+#       assert_match "pentestswarm version", shell_output("#{bin}/pentestswarm --version")
+#     install: |
+#       bin.install "pentestswarm"
+#
+# Once an AUR_KEY secret is added (SSH private key with push access to
+# aur:pentestswarm-bin.git), uncomment the aurs: block to push PKGBUILD
+# updates on each release, replacing manual maintenance of the AUR repo:
+#
+# aurs:
+#   - name: pentestswarm-bin
+#     homepage: https://github.com/Armur-Ai/Pentest-Swarm-AI
+#     description: Swarm of AI agents for authorized penetration testing
+#     maintainers:
+#       - 'Akhil Sharma <akhilsails@gmail.com>'
+#     license: AGPL-3.0-only
+#     private_key: '{{ .Env.AUR_KEY }}'
+#     git_url: 'ssh://aur@aur.archlinux.org/pentestswarm-bin.git'
+#     provides:
+#       - pentestswarm
+#     conflicts:
+#       - pentestswarm
+#     package: |-
+#       install -Dm755 ./pentestswarm "${pkgdir}/usr/bin/pentestswarm"
