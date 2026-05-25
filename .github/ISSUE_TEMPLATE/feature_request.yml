@@ -1,0 +1,50 @@
+name: Feature request
+description: Propose a new capability or enhancement that isn't already on the roadmap
+title: "[feature] "
+labels: ["enhancement", "needs-design"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before filing — check [IMPLEMENTATION_PLAN.md](https://github.com/Armur-Ai/Pentest-Swarm-AI/blob/main/IMPLEMENTATION_PLAN.md). If the feature is already a `[ ]` checkbox item, file the "Pick up a roadmap task" template instead — that ties your work to an existing tracked item.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Describe the use case in terms of a real researcher's workflow. "I want to scan X but currently can't because Y."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: How would this look from the user's perspective? CLI flag, config option, new subcommand?
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: What other approaches did you weigh? Why is this one better?
+    validations:
+      required: false
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: Roughly how big is this? File-level estimate, dependencies, breaking changes?
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: contribution-intent
+    attributes:
+      label: Are you willing to implement this?
+      options:
+        - label: Yes, I'd like to take this on
+        - label: I can help with parts (design, review, testing)
+        - label: Just proposing — would love someone else to pick it up

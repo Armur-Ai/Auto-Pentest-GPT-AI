@@ -1,0 +1,30 @@
+# CODEOWNERS — auto-requests review from the listed owners when a PR
+# touches a matching path. GitHub uses the LAST matching rule, so order
+# more-specific rules below more-general ones.
+#
+# Reference: https://docs.github.com/en/repositories/managing-your-repositories-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default catch-all — every PR pings the maintainer.
+* @AkhilSharma90
+
+# Security-sensitive code paths — also auto-request review. Listed
+# explicitly so future co-maintainers can be added per-area without
+# affecting the default rule.
+/internal/agent/exploit/        @AkhilSharma90
+/internal/shellsafe/            @AkhilSharma90
+/internal/api/                  @AkhilSharma90
+/internal/scope/                @AkhilSharma90
+/internal/swarm/                @AkhilSharma90
+
+# Distribution + release infra — changes here can break installs for
+# everyone, so they get extra eyes.
+/.github/workflows/             @AkhilSharma90
+/.goreleaser.yaml               @AkhilSharma90
+/packaging/                     @AkhilSharma90
+/LICENSE                        @AkhilSharma90
+
+# Implementation plan and contributing docs are the project's "social
+# contract" — changes here should be deliberate.
+/IMPLEMENTATION_PLAN.md         @AkhilSharma90
+/CONTRIBUTING.md                @AkhilSharma90
+/README.md                      @AkhilSharma90

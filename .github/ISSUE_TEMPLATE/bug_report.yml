@@ -1,0 +1,80 @@
+name: Bug report
+description: Something broken or behaving wrong — wrong output, crash, exit code, hung process, etc.
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug. The more concrete the reproduction, the faster we fix it.
+
+        For **security vulnerabilities** (RCE, auth bypass, secret leak), do NOT use this form — file a private advisory at https://github.com/Armur-Ai/Pentest-Swarm-AI/security/advisories/new instead.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: One paragraph — what did you do, what did you expect, what did you see?
+      placeholder: "I ran `pentestswarm scan example.com` and expected X, but got Y."
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: The exact command(s) you ran. Redact API keys and target details if they're sensitive.
+      render: shell
+      placeholder: |
+        pentestswarm scan example.com --scope example.com --swarm
+    validations:
+      required: true
+
+  - type: textarea
+    id: relevant-logs
+    attributes:
+      label: Relevant logs / output
+      description: Copy-paste the relevant chunk. Use `pentestswarm scan --verbose` for more detail. Redact secrets.
+      render: shell
+    validations:
+      required: false
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Output of `pentestswarm --version`
+      placeholder: "v0.1.0 (commit: abc1234, built: 2026-04-21T...)"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: install-method
+    attributes:
+      label: How did you install?
+      multiple: false
+      options:
+        - Homebrew (brew install Armur-Ai/tap/pentestswarm)
+        - AUR (yay -S pentestswarm-bin)
+        - Docker (ghcr.io/armur-ai/pentestswarm)
+        - go install / from source
+        - Direct binary from GitHub Releases
+        - Other (specify below)
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: OS / arch
+      placeholder: "macOS 14.5 / arm64, Ubuntu 22.04 / amd64, etc."
+    validations:
+      required: true
+
+  - type: textarea
+    id: extra-context
+    attributes:
+      label: Anything else?
+      description: Other context — was the swarm targeting a HackerOne program, was the LLM Claude vs Together AI, were specific tools missing per `pentestswarm doctor`, etc.
+    validations:
+      required: false

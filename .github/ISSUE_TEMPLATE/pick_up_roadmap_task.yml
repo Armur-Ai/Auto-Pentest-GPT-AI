@@ -1,0 +1,55 @@
+name: Pick up a roadmap task
+description: Claim a task from IMPLEMENTATION_PLAN.md — usually a `good-first-issue` or `help-wanted` item
+title: "[task] "
+labels: ["help-wanted"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Welcome 👋 — thanks for picking up a roadmap task.
+
+        Workflow:
+        1. Find an unchecked `[ ]` item in [IMPLEMENTATION_PLAN.md](https://github.com/Armur-Ai/Pentest-Swarm-AI/blob/main/IMPLEMENTATION_PLAN.md) with the priority + scope you want (`P0`/`P1` = highest impact; `P3` = niche).
+        2. File this issue so we don't have two people working on the same thing in parallel.
+        3. Wait for a maintainer to confirm + assign the issue to you. We don't usually block — confirmation is mostly a chance to flag if anything's changed since the plan was written.
+        4. Fork, branch, implement (with tests), PR. See [CONTRIBUTING.md](https://github.com/Armur-Ai/Pentest-Swarm-AI/blob/main/CONTRIBUTING.md).
+
+  - type: input
+    id: plan-item
+    attributes:
+      label: Plan item ID
+      description: The numbered item from IMPLEMENTATION_PLAN.md (e.g. "2.1.13", "D.3.1", "5.1.2")
+      placeholder: "2.1.13"
+    validations:
+      required: true
+
+  - type: textarea
+    id: approach
+    attributes:
+      label: Your approach
+      description: One paragraph — what do you plan to build? Which files do you expect to touch? Any open design questions?
+    validations:
+      required: true
+
+  - type: input
+    id: timeline
+    attributes:
+      label: Rough timeline
+      description: When do you expect to have a PR up? (Honest is better than optimistic — "next 2 weekends" is fine)
+      placeholder: "Next weekend"
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: contract
+    attributes:
+      label: Contributor checklist
+      options:
+        - label: I've read CONTRIBUTING.md
+          required: true
+        - label: I'll write unit tests in the same shape as the existing adapters / packages
+          required: true
+        - label: I'll use UK English in comments (defence, colour, customise, sanitise — matches the project's existing convention)
+          required: true
+        - label: I understand the project is AGPL-3.0; my contribution will be under the same license
+          required: true

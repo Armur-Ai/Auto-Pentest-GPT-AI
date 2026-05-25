@@ -1,0 +1,14 @@
+# Force template selection — no blank issues.
+# Researchers who want to ask a quick question go to Discussions instead.
+blank_issues_enabled: false
+
+contact_links:
+  - name: Pick a task from the roadmap
+    url: https://github.com/orgs/Armur-Ai/projects
+    about: Browse the project board for `good-first-issue` and `help-wanted` items. Comment on an issue to claim it.
+  - name: Security vulnerability (private disclosure)
+    url: https://github.com/Armur-Ai/Pentest-Swarm-AI/security/advisories/new
+    about: Do NOT open a public issue for security vulns. Use the private advisory flow.
+  - name: Question / discussion
+    url: https://github.com/Armur-Ai/Pentest-Swarm-AI/discussions
+    about: For open-ended questions, design discussions, or "is this a bug or a feature" debates.
