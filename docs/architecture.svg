@@ -1,0 +1,86 @@
+<svg viewBox="0 0 948 520" xmlns="http://www.w3.org/2000/svg" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" role="img" aria-label="Pentest Swarm AI architecture: a seed feeds a shared pgvector blackboard that triggers four independent agents by pheromone threshold; exploit results feed back to wake other agents.">
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M1.5 1.5 L8.5 5 L1.5 8.5" fill="none" stroke="#F5A623" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="ahb" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M1.5 1.5 L8.5 5 L1.5 8.5" fill="none" stroke="#7F77DD" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <linearGradient id="bb" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#161d2b"/>
+      <stop offset="1" stop-color="#10151f"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="0" y="0" width="948" height="520" rx="16" fill="#0B0E14"/>
+  <rect x="0.5" y="0.5" width="947" height="519" rx="16" fill="none" stroke="#20293a"/>
+
+  <g transform="translate(24,26)">
+    <!-- YOU / seed -->
+    <rect x="360" y="16" width="180" height="46" rx="9" fill="#10151f" stroke="#20293a"/>
+    <text x="450" y="38" text-anchor="middle" fill="#8A93A6" font-size="11" letter-spacing="1">YOU</text>
+    <text x="450" y="53" text-anchor="middle" fill="#E6E9EF" font-size="12">scan --swarm</text>
+    <line x1="450" y1="62" x2="450" y2="92" stroke="#7F77DD" stroke-width="1.6" marker-end="url(#ahb)"/>
+
+    <rect x="372" y="92" width="156" height="34" rx="17" fill="none" stroke="#7F77DD" stroke-dasharray="4 4" opacity="0.8"/>
+    <text x="450" y="114" text-anchor="middle" fill="#AFA9EC" font-size="11.5">SEED · TARGET_REG</text>
+    <line x1="450" y1="126" x2="450" y2="150" stroke="#7F77DD" stroke-width="1.6" marker-end="url(#ahb)"/>
+
+    <!-- blackboard -->
+    <rect x="150" y="152" width="600" height="118" rx="14" fill="url(#bb)" stroke="#2b3550"/>
+    <text x="174" y="180" fill="#F5A623" font-size="12.5" letter-spacing="1.5">SHARED BLACKBOARD</text>
+    <text x="726" y="180" text-anchor="end" fill="#5c6577" font-size="11">pgvector</text>
+    <g fill="#cdd3df" font-size="11.5">
+      <text x="174" y="208">SUBDOMAIN · PORT_OPEN · HTTP_ENDPOINT · TECHNOLOGY</text>
+      <text x="174" y="228">CVE_MATCH · MISCONFIGURATION · EXPLOIT_CHAIN</text>
+      <text x="174" y="248">EXPLOIT_RESULT · CAMPAIGN_COMPLETE</text>
+    </g>
+    <text x="726" y="248" text-anchor="end" fill="#5c6577" font-size="10.5" font-style="italic">each finding carries a decaying pheromone</text>
+
+    <!-- triggers -->
+    <path d="M232 270 L232 330" fill="none" stroke="#F5A623" stroke-width="1.7" marker-end="url(#ah)"/>
+    <text x="240" y="304" fill="#8A93A6" font-size="10">on: TARGET_REG</text>
+    <path d="M377 270 L377 330" fill="none" stroke="#F5A623" stroke-width="1.7" marker-end="url(#ah)"/>
+    <text x="385" y="304" fill="#8A93A6" font-size="10">pheromone &gt; 0.2</text>
+    <path d="M523 270 L523 330" fill="none" stroke="#F5A623" stroke-width="2.4" marker-end="url(#ah)"/>
+    <text x="531" y="304" fill="#8A93A6" font-size="10">CVE · phm &gt; 0.5</text>
+    <path d="M668 270 L668 330" fill="none" stroke="#F5A623" stroke-width="1.7" marker-end="url(#ah)"/>
+    <text x="676" y="304" fill="#8A93A6" font-size="10">CAMPAIGN_DONE</text>
+
+    <!-- feedback -->
+    <path d="M523 452 C 523 420, 800 420, 800 270" fill="none" stroke="#3DDC97" stroke-width="1.4" stroke-dasharray="5 5" opacity="0.7"/>
+    <text x="812" y="360" fill="#3DDC97" font-size="10" opacity="0.85" transform="rotate(90 812 360)">results feed back → wake other agents</text>
+
+    <!-- agent cards -->
+    <g>
+      <rect x="168" y="332" width="128" height="120" rx="11" fill="#0F141D" stroke="#3a3570"/>
+      <rect x="168" y="332" width="128" height="26" rx="11" fill="#171433"/>
+      <text x="232" y="349" text-anchor="middle" fill="#AFA9EC" font-size="12.5" letter-spacing="1">RECON</text>
+      <text x="232" y="380" text-anchor="middle" fill="#cdd3df" font-size="10.5">runs 8 tools</text>
+      <text x="232" y="398" text-anchor="middle" fill="#8A93A6" font-size="10">subfinder · httpx</text>
+      <text x="232" y="414" text-anchor="middle" fill="#8A93A6" font-size="10">naabu · nuclei…</text>
+      <text x="232" y="438" text-anchor="middle" fill="#5c6577" font-size="10">writes findings</text>
+
+      <rect x="313" y="332" width="128" height="120" rx="11" fill="#0F141D" stroke="#3a3570"/>
+      <rect x="313" y="332" width="128" height="26" rx="11" fill="#171433"/>
+      <text x="377" y="349" text-anchor="middle" fill="#AFA9EC" font-size="12.5" letter-spacing="1">CLASSIFY</text>
+      <text x="377" y="380" text-anchor="middle" fill="#cdd3df" font-size="10.5">maps CVEs</text>
+      <text x="377" y="398" text-anchor="middle" fill="#8A93A6" font-size="10">scores CVSS v3.1</text>
+      <text x="377" y="438" text-anchor="middle" fill="#5c6577" font-size="10">writes back</text>
+
+      <rect x="459" y="332" width="128" height="120" rx="11" fill="#0F141D" stroke="#5a4a2a"/>
+      <rect x="459" y="332" width="128" height="26" rx="11" fill="#2a2213"/>
+      <text x="523" y="349" text-anchor="middle" fill="#F5A623" font-size="12.5" letter-spacing="1">EXPLOIT</text>
+      <text x="523" y="380" text-anchor="middle" fill="#cdd3df" font-size="10.5">builds chains</text>
+      <text x="523" y="398" text-anchor="middle" fill="#8A93A6" font-size="10">scope-guarded</text>
+      <text x="523" y="438" text-anchor="middle" fill="#5c6577" font-size="10">emits results</text>
+
+      <rect x="604" y="332" width="128" height="120" rx="11" fill="#0F141D" stroke="#3a3570"/>
+      <rect x="604" y="332" width="128" height="26" rx="11" fill="#171433"/>
+      <text x="668" y="349" text-anchor="middle" fill="#AFA9EC" font-size="12.5" letter-spacing="1">REPORT</text>
+      <text x="668" y="380" text-anchor="middle" fill="#cdd3df" font-size="10.5">queries board</text>
+      <text x="668" y="398" text-anchor="middle" fill="#8A93A6" font-size="10">md · html</text>
+      <text x="668" y="414" text-anchor="middle" fill="#8A93A6" font-size="10">json · sarif</text>
+    </g>
+  </g>
+</svg>
