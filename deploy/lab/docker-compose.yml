@@ -1,0 +1,23 @@
+# Bundled practice target for Pentest Swarm AI.
+#
+# `pentestswarm scan --lab` writes and runs this same compose file for you,
+# then tears it down. This copy is here so you can audit exactly what --lab
+# starts, or run it by hand:
+#
+#   docker compose -f deploy/lab/docker-compose.yml up -d
+#   until curl -sf http://localhost:3000/rest/admin/application-version >/dev/null; do sleep 3; done
+#   pentestswarm scan http://localhost:3000 --scope 127.0.0.1/32,localhost --swarm --follow
+#   docker compose -f deploy/lab/docker-compose.yml down -v
+#
+# (`pentestswarm scan --lab` does the up / wait-for-ready / down for you.)
+#
+# OWASP Juice Shop is intentionally vulnerable and safe to attack — it's the
+# canonical modern vulnerable web app. Nothing here touches the outside world.
+#
+# NOTE: kept in sync with the embedded `labCompose` const in cli/lab.go.
+services:
+  juice-shop:
+    image: bkimminich/juice-shop:latest
+    container_name: pentestswarm-lab-juiceshop
+    ports:
+      - "3000:3000"
