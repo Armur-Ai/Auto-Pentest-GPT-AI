@@ -1,0 +1,68 @@
+<svg viewBox="0 0 900 400" xmlns="http://www.w3.org/2000/svg" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" role="img" aria-label="Defense in depth: a proposed exploit command passes four independent gates — scope clamp, provenance check, injection heuristics, and rate limit — before it can execute. Failing any gate blocks it.">
+  <defs>
+    <marker id="dg" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M1.5 1.5 L8.5 5 L1.5 8.5" fill="none" stroke="#3DDC97" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="900" height="400" rx="16" fill="#0B0E14"/>
+  <rect x="0.5" y="0.5" width="899" height="399" rx="16" fill="none" stroke="#20293a"/>
+
+  <text x="40" y="44" fill="#F5A623" font-size="13" letter-spacing="1.5">DEFENSE IN DEPTH</text>
+  <text x="40" y="64" fill="#8A93A6" font-size="11.5">every proposed command clears four independent gates before it can run — fail one, it's blocked</text>
+
+  <!-- proposed cmd -->
+  <rect x="34" y="150" width="120" height="70" rx="10" fill="#2a2213" stroke="#5a4a2a"/>
+  <text x="94" y="180" text-anchor="middle" fill="#F5A623" font-size="11">EXPLOIT</text>
+  <text x="94" y="197" text-anchor="middle" fill="#8A93A6" font-size="10">proposes cmd</text>
+
+  <!-- gates -->
+  <g>
+    <!-- gate template: number, title, blocks -->
+    <line x1="154" y1="185" x2="182" y2="185" stroke="#3DDC97" stroke-width="1.6" marker-end="url(#dg)"/>
+    <rect x="184" y="140" width="132" height="90" rx="10" fill="#0F141D" stroke="#2b3550"/>
+    <text x="250" y="164" text-anchor="middle" fill="#7F77DD" font-size="10">GATE 1</text>
+    <text x="250" y="184" text-anchor="middle" fill="#E6E9EF" font-size="11.5">scope clamp</text>
+    <text x="250" y="204" text-anchor="middle" fill="#5c6577" font-size="9.5">off-scope host</text>
+    <text x="250" y="217" text-anchor="middle" fill="#5c6577" font-size="9.5">→ rejected</text>
+
+    <line x1="316" y1="185" x2="344" y2="185" stroke="#3DDC97" stroke-width="1.6" marker-end="url(#dg)"/>
+    <rect x="346" y="140" width="132" height="90" rx="10" fill="#0F141D" stroke="#2b3550"/>
+    <text x="412" y="164" text-anchor="middle" fill="#7F77DD" font-size="10">GATE 2</text>
+    <text x="412" y="184" text-anchor="middle" fill="#E6E9EF" font-size="11.5">provenance</text>
+    <text x="412" y="204" text-anchor="middle" fill="#5c6577" font-size="9.5">only coordinator-</text>
+    <text x="412" y="217" text-anchor="middle" fill="#5c6577" font-size="9.5">issued allowlist</text>
+
+    <line x1="478" y1="185" x2="506" y2="185" stroke="#3DDC97" stroke-width="1.6" marker-end="url(#dg)"/>
+    <rect x="508" y="140" width="132" height="90" rx="10" fill="#0F141D" stroke="#2b3550"/>
+    <text x="574" y="164" text-anchor="middle" fill="#7F77DD" font-size="10">GATE 3</text>
+    <text x="574" y="184" text-anchor="middle" fill="#E6E9EF" font-size="11.5">injection heur.</text>
+    <text x="574" y="204" text-anchor="middle" fill="#5c6577" font-size="9.5">prompt-injection /</text>
+    <text x="574" y="217" text-anchor="middle" fill="#5c6577" font-size="9.5">shell-escape scan</text>
+
+    <line x1="640" y1="185" x2="668" y2="185" stroke="#3DDC97" stroke-width="1.6" marker-end="url(#dg)"/>
+    <rect x="670" y="140" width="132" height="90" rx="10" fill="#0F141D" stroke="#2b3550"/>
+    <text x="736" y="164" text-anchor="middle" fill="#7F77DD" font-size="10">GATE 4</text>
+    <text x="736" y="184" text-anchor="middle" fill="#E6E9EF" font-size="11.5">rate limit</text>
+    <text x="736" y="204" text-anchor="middle" fill="#5c6577" font-size="9.5">per-target budget</text>
+    <text x="736" y="217" text-anchor="middle" fill="#5c6577" font-size="9.5">+ cooldown</text>
+
+    <line x1="802" y1="185" x2="828" y2="185" stroke="#3DDC97" stroke-width="1.8" marker-end="url(#dg)"/>
+  </g>
+
+  <!-- exec -->
+  <rect x="792" y="150" width="76" height="70" rx="10" fill="#12241c" stroke="#2f6b4f"/>
+  <text x="830" y="182" text-anchor="middle" fill="#3DDC97" font-size="11">EXEC</text>
+  <text x="830" y="199" text-anchor="middle" fill="#5c6577" font-size="9">in scope</text>
+
+  <!-- blocked drop paths -->
+  <g stroke="#ff6b6b" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.7" fill="none">
+    <path d="M250 230 L250 300"/>
+    <path d="M412 230 L412 300"/>
+    <path d="M574 230 L574 300"/>
+    <path d="M736 230 L736 300"/>
+  </g>
+  <rect x="150" y="300" width="700" height="40" rx="10" fill="#1c1113" stroke="#5a2a2a"/>
+  <text x="500" y="325" text-anchor="middle" fill="#ff8787" font-size="11.5">✕ BLOCKED — logged, never executed  ·  cleanup registered before any command runs</text>
+
+  <text x="40" y="372" fill="#5c6577" font-size="10.5">the gates are independent — a bypass of one is still caught by the next. Full writeup: docs/security/swarm-hardening.md</text>
+</svg>

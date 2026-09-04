@@ -1,0 +1,40 @@
+<svg viewBox="0 0 900 470" xmlns="http://www.w3.org/2000/svg" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" role="img" aria-label="Pheromone lifecycle: a finding's weight spikes to 1.0 when written, then decays over time. Above 0.5 the exploit agent fires; above 0.2 the classifier fires; below 0.2 the finding goes stale. Different finding types decay at different rates.">
+  <rect x="0" y="0" width="900" height="470" rx="16" fill="#0B0E14"/>
+  <rect x="0.5" y="0.5" width="899" height="469" rx="16" fill="none" stroke="#20293a"/>
+
+  <text x="40" y="44" fill="#F5A623" font-size="13" letter-spacing="1.5">PHEROMONE LIFECYCLE</text>
+  <text x="40" y="64" fill="#8A93A6" font-size="11.5">a finding's weight decays over time — the swarm forgets stale paths on its own</text>
+
+  <!-- axes -->
+  <g stroke="#2b3550" stroke-width="1">
+    <line x1="100" y1="90" x2="100" y2="392"/>
+    <line x1="100" y1="392" x2="828" y2="392"/>
+  </g>
+  <text x="92" y="96" text-anchor="end" fill="#5c6577" font-size="10">1.0</text>
+  <text x="92" y="396" text-anchor="end" fill="#5c6577" font-size="10">0</text>
+  <text x="60" y="245" fill="#5c6577" font-size="10" transform="rotate(-90 60 245)">pheromone weight</text>
+  <text x="828" y="410" text-anchor="end" fill="#5c6577" font-size="10">time →</text>
+
+  <!-- threshold lines -->
+  <line x1="100" y1="235" x2="828" y2="235" stroke="#F5A623" stroke-width="1" stroke-dasharray="5 5" opacity="0.6"/>
+  <text x="824" y="230" text-anchor="end" fill="#F5A623" font-size="10.5">0.5 · exploit agent fires</text>
+  <line x1="100" y1="322" x2="828" y2="322" stroke="#7F77DD" stroke-width="1" stroke-dasharray="5 5" opacity="0.6"/>
+  <text x="824" y="317" text-anchor="end" fill="#AFA9EC" font-size="10.5">0.2 · classifier fires</text>
+
+  <!-- slow decay (PORT_OPEN) -->
+  <path d="M170 392 L170 96 C 240 120, 380 190, 470 235 C 560 280, 700 322, 828 352" fill="none" stroke="#F5A623" stroke-width="2.4"/>
+  <circle cx="170" cy="96" r="4" fill="#FFD580"/>
+  <text x="180" y="112" fill="#F5A623" font-size="11">PORT_OPEN · half-life hours</text>
+
+  <!-- fast decay (SESSION) -->
+  <path d="M300 392 L300 96 C 330 150, 360 210, 384 235 C 415 268, 450 322, 500 360" fill="none" stroke="#7F77DD" stroke-width="2.4"/>
+  <circle cx="300" cy="96" r="4" fill="#C9C4F5"/>
+  <text x="310" y="130" fill="#AFA9EC" font-size="11">SESSION · half-life minutes</text>
+
+  <!-- annotations -->
+  <text x="170" y="418" text-anchor="middle" fill="#3DDC97" font-size="10">written</text>
+  <text x="470" y="252" text-anchor="middle" fill="#8A93A6" font-size="9.5">crosses 0.5</text>
+  <text x="720" y="342" text-anchor="middle" fill="#5c6577" font-size="10">→ going stale</text>
+
+  <text x="40" y="452" fill="#5c6577" font-size="10.5">config-driven half-lives per finding type · re-observation re-spikes the weight · nothing needs a central scheduler</text>
+</svg>

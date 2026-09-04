@@ -1,0 +1,85 @@
+<svg viewBox="0 0 1200 400" xmlns="http://www.w3.org/2000/svg" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, monospace" role="img" aria-label="Pentest Swarm AI — the first open-source pentesting tool built on a real swarm.">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0B0E14"/>
+      <stop offset="0.55" stop-color="#0C1017"/>
+      <stop offset="1" stop-color="#0A0D12"/>
+    </linearGradient>
+    <radialGradient id="hubGlow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#F5A623" stop-opacity="0.42"/>
+      <stop offset="0.45" stop-color="#F5A623" stop-opacity="0.10"/>
+      <stop offset="1" stop-color="#F5A623" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ambient" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#7F77DD" stop-opacity="0.12"/>
+      <stop offset="1" stop-color="#7F77DD" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- ground -->
+  <rect x="0" y="0" width="1200" height="400" rx="0" fill="url(#bg)"/>
+  <ellipse cx="1010" cy="200" rx="330" ry="260" fill="url(#ambient)"/>
+
+  <!-- ===== swarm motif (right): nodes → converging on the blackboard hub ===== -->
+  <g stroke="#F5A623" fill="none">
+    <line x1="854" y1="96"  x2="1064" y2="196" stroke-width="1"   opacity="0.30"/>
+    <line x1="822" y1="204" x2="1064" y2="200" stroke-width="1.4" opacity="0.55"/>
+    <line x1="860" y1="312" x2="1064" y2="204" stroke-width="1"   opacity="0.32"/>
+    <line x1="944" y1="120" x2="1066" y2="198" stroke-width="1.2" opacity="0.45"/>
+    <line x1="930" y1="292" x2="1066" y2="202" stroke-width="1.2" opacity="0.42"/>
+    <line x1="1002" y1="74" x2="1070" y2="196" stroke-width="1"   opacity="0.28"/>
+    <line x1="1012" y1="336" x2="1070" y2="204" stroke-width="1"  opacity="0.30"/>
+    <line x1="906" y1="200" x2="1064" y2="200" stroke-width="1.6" opacity="0.60"/>
+    <line x1="972" y1="182" x2="1068" y2="199" stroke-width="1.3" opacity="0.50"/>
+    <line x1="884" y1="150" x2="1066" y2="199" stroke-width="1"   opacity="0.34"/>
+    <line x1="952" y1="252" x2="1066" y2="201" stroke-width="1.1" opacity="0.40"/>
+  </g>
+
+  <!-- faint agent halo rings -->
+  <g fill="none" stroke="#7F77DD" stroke-width="0.8">
+    <circle cx="822" cy="204" r="13" opacity="0.30"/>
+    <circle cx="944" cy="120" r="12" opacity="0.28"/>
+    <circle cx="930" cy="292" r="12" opacity="0.26"/>
+    <circle cx="972" cy="182" r="10" opacity="0.30"/>
+    <circle cx="1012" cy="336" r="11" opacity="0.24"/>
+    <circle cx="854" cy="96"  r="11" opacity="0.22"/>
+  </g>
+
+  <!-- nodes: amber = hot findings, purple = agents -->
+  <g>
+    <circle cx="854" cy="96"  r="5.5" fill="#F5A623" opacity="0.9"/>
+    <circle cx="822" cy="204" r="6.5" fill="#F5A623" opacity="0.95"/>
+    <circle cx="860" cy="312" r="4.5" fill="#7F77DD" opacity="0.8"/>
+    <circle cx="944" cy="120" r="5"   fill="#F5A623" opacity="0.9"/>
+    <circle cx="930" cy="292" r="5.5" fill="#7F77DD" opacity="0.8"/>
+    <circle cx="1002" cy="74" r="4"   fill="#7F77DD" opacity="0.7"/>
+    <circle cx="1012" cy="336" r="5"  fill="#F5A623" opacity="0.9"/>
+    <circle cx="906" cy="200" r="4.5" fill="#7F77DD" opacity="0.75"/>
+    <circle cx="972" cy="182" r="4"   fill="#F5A623" opacity="0.9"/>
+    <circle cx="884" cy="150" r="3.5" fill="#7F77DD" opacity="0.7"/>
+    <circle cx="952" cy="252" r="4.5" fill="#7F77DD" opacity="0.75"/>
+  </g>
+
+  <!-- blackboard hub -->
+  <circle cx="1066" cy="200" r="58" fill="url(#hubGlow)"/>
+  <circle cx="1066" cy="200" r="9" fill="#FFD580"/>
+  <circle cx="1066" cy="200" r="15" fill="none" stroke="#F5A623" stroke-width="1.2" opacity="0.55"/>
+  <text x="1066" y="238" text-anchor="middle" fill="#8A93A6" font-size="10.5" letter-spacing="1.5">BLACKBOARD</text>
+
+  <!-- ===== wordmark block (left) ===== -->
+  <text x="70" y="120" fill="#F5A623" font-size="14" letter-spacing="6" opacity="0.92">// AUTONOMOUS OFFENSIVE-SECURITY <tspan fill="#7F77DD">SWARM</tspan></text>
+
+  <text x="68" y="205" font-size="66" font-weight="800" letter-spacing="1" fill="#FFFFFF">PENTEST <tspan fill="#F5A623">SWARM</tspan> <tspan fill="#8A93A6">AI</tspan></text>
+
+  <text x="70" y="250" fill="#C7CDD9" font-size="17">A real swarm — agents coordinating through a shared</text>
+  <text x="70" y="274" fill="#C7CDD9" font-size="17">blackboard, not multiple agents in a row.</text>
+
+  <!-- command chip -->
+  <g>
+    <rect x="70" y="300" width="612" height="42" rx="9" fill="#121722" stroke="#20293a"/>
+    <text x="88" y="326" font-size="15">
+      <tspan fill="#3DDC97">$</tspan><tspan fill="#E6E9EF" dx="10">pentestswarm scan example.com </tspan><tspan fill="#F5A623">--swarm --follow</tspan>
+    </text>
+    <rect x="648" y="312" width="9" height="18" fill="#F5A623" opacity="0.9"/>
+  </g>
+</svg>
